@@ -20,8 +20,9 @@
 		84F5003A1DA0E26A00741C97 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F500391DA0E26A00741C97 /* SystemConfiguration.framework */; };
 		84F5003C1DA0E27600741C97 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F5003B1DA0E27600741C97 /* Foundation.framework */; };
 		84F5003E1DA0E27D00741C97 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F5003D1DA0E27D00741C97 /* PassKit.framework */; };
+		84F500401DA1887900741C97 /* BillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5003F1DA1887900741C97 /* BillView.swift */; };
+		84F500421DA189E400741C97 /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F500411DA189E400741C97 /* PaymentView.swift */; };
 		84F5FFF91DA0E13B00741C97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5FFF81DA0E13B00741C97 /* AppDelegate.swift */; };
-		84F5FFFB1DA0E13B00741C97 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5FFFA1DA0E13B00741C97 /* ViewController.swift */; };
 		84F5FFFE1DA0E13B00741C97 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84F5FFFC1DA0E13B00741C97 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -65,9 +66,10 @@
 		84F500391DA0E26A00741C97 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		84F5003B1DA0E27600741C97 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84F5003D1DA0E27D00741C97 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
+		84F5003F1DA1887900741C97 /* BillView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillView.swift; sourceTree = "<group>"; };
+		84F500411DA189E400741C97 /* PaymentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
 		84F5FFF51DA0E13B00741C97 /* FSFirstDataDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FSFirstDataDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F5FFF81DA0E13B00741C97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		84F5FFFA1DA0E13B00741C97 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		84F5FFFD1DA0E13B00741C97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84F5FFFF1DA0E13B00741C97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -173,7 +175,8 @@
 			isa = PBXGroup;
 			children = (
 				84F5FFF81DA0E13B00741C97 /* AppDelegate.swift */,
-				84F5FFFA1DA0E13B00741C97 /* ViewController.swift */,
+				84F5003F1DA1887900741C97 /* BillView.swift */,
+				84F500411DA189E400741C97 /* PaymentView.swift */,
 				84F500331DA0E21200741C97 /* Supporting Files */,
 				84F5FFFC1DA0E13B00741C97 /* Main.storyboard */,
 				84F5FFFF1DA0E13B00741C97 /* Assets.xcassets */,
@@ -336,10 +339,11 @@
 			files = (
 				84F500301DA0E1EF00741C97 /* SBJson4StreamWriter.m in Sources */,
 				84F500311DA0E1EF00741C97 /* SBJson4StreamWriterState.m in Sources */,
-				84F5FFFB1DA0E13B00741C97 /* ViewController.swift in Sources */,
 				84F500291DA0E1D400741C97 /* PayeezySDK.m in Sources */,
+				84F500421DA189E400741C97 /* PaymentView.swift in Sources */,
 				84F500321DA0E1EF00741C97 /* SBJson4Writer.m in Sources */,
 				84F5FFF91DA0E13B00741C97 /* AppDelegate.swift in Sources */,
+				84F500401DA1887900741C97 /* BillView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
