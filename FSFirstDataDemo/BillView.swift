@@ -33,10 +33,19 @@ class BillView: UIViewController {
     var itemFiveName = UILabel()
     var itemFivePriceDisplay = UILabel()
     
+    var lineSubTotal = UILabel()
+    
+    var salesTax = UILabel()
+    var serviceField = UITextField()
+    var serviceText = UILabel()
+    var serviceTypeBtn = UIButton()
+    var totalText = UILabel()
+    var totalDisplay = UILabel()
+    var toPayment = UIButton()
+    
     var billPreTax = Double()
     var billTotal = Double()
-    
-    
+    var serviceAmount = Double()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,57 +64,57 @@ class BillView: UIViewController {
         view.addSubview(locationName)
         
         selection = UILabel.init(frame: CGRect(x: 0, y: 95, width: view.frame.size.width, height: 20))
-        selection.text = "---  Selection  ---"
+        selection.text = "-----  Selection  -----"
         selection.textAlignment = .center
         selection.setSizeFont(sizeFont: 14.0)
         view.addSubview(selection)
         
         itemOneName = UILabel.init(frame: CGRect(x: 20, y: 120, width: view.frame.size.width, height: 30))
-        itemOneName.text = "---  Selection  ---"
+        itemOneName.text = "Cabernet Filet Mignon"
         itemOneName.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemOneName)
 
         itemOnePriceDisplay = UILabel.init(frame: CGRect(x: 10, y: 120, width: view.frame.size.width - 30, height: 30))
-        itemOnePriceDisplay.text = "$29.99"
+        itemOnePriceDisplay.text = "$39.99"
         itemOnePriceDisplay.textAlignment = .right
-        itemOnePriceDisplay.setSizeFont(sizeFont: 16.0)
+        itemOnePriceDisplay.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemOnePriceDisplay)
         
         itemTwoName = UILabel.init(frame: CGRect(x: 20, y: 150, width: view.frame.size.width, height: 30))
-        itemTwoName.text = "---  Selection  ---"
+        itemTwoName.text = "Wild Surf & Turf"
         itemTwoName.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemTwoName)
 
         itemTwoPriceDisplay = UILabel.init(frame: CGRect(x: 10, y: 150, width: view.frame.size.width - 30, height: 30))
-        itemTwoPriceDisplay.text = "$37.99"
+        itemTwoPriceDisplay.text = "$47.99"
         itemTwoPriceDisplay.textAlignment = .right
         itemTwoPriceDisplay.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemTwoPriceDisplay)
         
         itemThreeName = UILabel.init(frame: CGRect(x: 20, y: 180, width: view.frame.size.width, height: 30))
-        itemThreeName.text = "---  Selection  ---"
+        itemThreeName.text = "2010 Château Faizeau"
         itemThreeName.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemThreeName)
         
         itemThreePriceDisplay = UILabel.init(frame: CGRect(x: 10, y: 180, width: view.frame.size.width - 30, height: 30))
-        itemThreePriceDisplay.text = "$48.49"
+        itemThreePriceDisplay.text = "$52.49"
         itemThreePriceDisplay.textAlignment = .right
         itemThreePriceDisplay.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemThreePriceDisplay)
         
         itemFourName = UILabel.init(frame: CGRect(x: 20, y: 210, width: view.frame.size.width, height: 30))
-        itemFourName.text = "---  Selection  ---"
+        itemFourName.text = "Gâteau Forêt-Noire"
         itemFourName.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemFourName)
         
         itemFourPriceDisplay = UILabel.init(frame: CGRect(x: 10, y: 210, width: view.frame.size.width - 30, height: 30))
-        itemFourPriceDisplay.text = "$13.99"
+        itemFourPriceDisplay.text = "$14.99"
         itemFourPriceDisplay.textAlignment = .right
         itemFourPriceDisplay.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemFourPriceDisplay)
         
         itemFiveName = UILabel.init(frame: CGRect(x: 20, y: 240, width: view.frame.size.width, height: 30))
-        itemFiveName.text = "---  Selection  ---"
+        itemFiveName.text = "Key Lime Pie"
         itemFiveName.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemFiveName)
         
@@ -115,31 +124,64 @@ class BillView: UIViewController {
         itemFivePriceDisplay.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemFivePriceDisplay)
         
+        lineSubTotal = UILabel.init(frame: CGRect(x: 0, y: 270, width: view.frame.size.width, height: 20))
+        lineSubTotal.text = "--------------------"
+        lineSubTotal.textAlignment = .center
+        lineSubTotal.setSizeFont(sizeFont: 14.0)
+        view.addSubview(lineSubTotal)
         
+        salesTax = UILabel.init(frame: CGRect(x: 0, y: 290, width: view.frame.size.width - 24, height: 30))
+        salesTax.text = "Sales Tax:     7.5%"
+        salesTax.textAlignment = .right
+        salesTax.setSizeFont(sizeFont: 14.0)
+        view.addSubview(salesTax)
         
+        serviceTypeBtn = UIButton.init(frame: CGRect(x: view.frame.size.width - 179, y: 318, width: 30, height: 30))
+        serviceTypeBtn.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
+        serviceTypeBtn.layer.borderWidth = 1
+        serviceTypeBtn.layer.borderColor = UIColor.black.cgColor
+        serviceTypeBtn.layer.cornerRadius = 8
+        serviceTypeBtn.setTitle("$", for: .normal)
+        serviceTypeBtn.setTitleColor(.black, for: .normal)
+        serviceTypeBtn.setTitle("%", for: .selected)
+        view.addSubview(serviceTypeBtn)
         
-        // Item one  + price //steak and fries
+        serviceText = UILabel.init(frame: CGRect(x: view.frame.size.width - 156, y: 320, width: 75, height: 25))
+        serviceText.text = "Service:  "
+        serviceText.textAlignment = .right
+        serviceText.setSizeFont(sizeFont: 14.0)
+        view.addSubview(serviceText)
         
-        // Item two + price // Table D'haute
+        serviceField = UITextField.init(frame: CGRect(x: view.frame.size.width - 74, y: 320, width: 60, height: 25))
+        serviceField.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
+        serviceField.layer.cornerRadius = 4
+        serviceField.textAlignment = .right
+        serviceField.placeholder = "0.00"
+        view.addSubview(serviceField)
         
-        // Item three + price // Bottle of wine
+        totalText = UILabel.init(frame: CGRect(x: view.frame.size.width - 140, y: 350, width: 60, height: 30))
+        totalText.text = "Total: "
+        totalText.textAlignment = .right
+        totalText.setSizeFont(sizeFont: 14.0)
+        view.addSubview(totalText)
         
-        // Item four + price //  Desert 1
+        billTotal = 499.99
         
-        // Item five + price // Desert 2
+        totalDisplay = UILabel.init(frame: CGRect(x: 0, y: 350, width: view.frame.size.width - 18, height: 30))
+        totalDisplay.text = "$\(billTotal)"
+        totalDisplay.textAlignment = .right
+        totalDisplay.setSizeFont(sizeFont: 14.0)
+        view.addSubview(totalDisplay)
         
+        toPayment = UIButton.init(frame: CGRect(x: view.frame.size.width - 220, y: view.frame.size.height - 80, width: 200, height: 60))
+        toPayment.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
+        toPayment.layer.borderWidth = 1
+        toPayment.layer.borderColor = UIColor.black.cgColor
+        toPayment.layer.cornerRadius = 12
+        toPayment.setTitle("Proceed To Payment", for: .normal)
+        toPayment.setTitleColor(.black, for: .normal)
+        view.addSubview(toPayment)
         
-        // Tip button switch  $/%
-        
-        
-        
-        // sales tax + %
-        
-        // Tip area
-        
-        // total dynamic
-        
-        // Payment button
     }
     
     override func didReceiveMemoryWarning() {
