@@ -19,7 +19,7 @@ extension Double {
     }
 }
 
-class BillView: UIViewController {
+class BillView: UIViewController, UITextFieldDelegate {
 
     var thankYou = UILabel()
     var locationName = UILabel()
@@ -44,11 +44,14 @@ class BillView: UIViewController {
     
     var salesTaxText = UILabel()
     var salesTaxValue = UILabel()
-    var serviceField = UITextField()
+    
+    @IBOutlet var serviceField: UITextField!
     var serviceText = UILabel()
     var serviceTypeBtn = UIButton()
+    
     var totalText = UILabel()
     var totalDisplay = UILabel()
+    
     var toPayment = UIButton()
     
     var billPreTax = Double()
@@ -163,7 +166,7 @@ class BillView: UIViewController {
         serviceTypeBtn.layer.cornerRadius = 8
         serviceTypeBtn.setTitle("$", for: .normal)
         serviceTypeBtn.setTitleColor(.black, for: .normal)
-        serviceTypeBtn.setTitle("%", for: .selected)
+        serviceTypeBtn.addTarget(self, action: #selector(changeServiceType) , for: .touchUpInside)
         view.addSubview(serviceTypeBtn)
         
         serviceText = UILabel.init(frame: CGRect(x: view.frame.size.width - 156, y: 320, width: 75, height: 25))
@@ -176,7 +179,8 @@ class BillView: UIViewController {
         serviceField.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
         serviceField.layer.cornerRadius = 4
         serviceField.textAlignment = .right
-        serviceField.placeholder = "0.00"
+        serviceField.placeholder = "$0.00"
+        serviceField.delegate = self
         view.addSubview(serviceField)
         
         totalText = UILabel.init(frame: CGRect(x: view.frame.size.width - 140, y: 350, width: 60, height: 30))
@@ -203,7 +207,31 @@ class BillView: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
+    }
+    
+    func changeServiceType(button: UIButton) {
+        if !button.isSelected {
+            button.isSelected = true
+            button.setTitle("%", for: .normal)
+            serviceField.text = ""
+            serviceField.placeholder = "0%"
+            
+        } else {
+            button.isSelected = false
+            button.setTitle("$", for: .normal)
+            serviceField.text = ""
+            serviceField.placeholder = "$0.00"
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+        super.touchesBegan(touches, with: event)
     }
     
 }
