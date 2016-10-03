@@ -12,6 +12,13 @@ extension UILabel {
     }
 }
 
+extension Double {
+    func roundTo(places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
+    }
+}
+
 class BillView: UIViewController {
 
     var thankYou = UILabel()
@@ -35,7 +42,8 @@ class BillView: UIViewController {
     
     var lineSubTotal = UILabel()
     
-    var salesTax = UILabel()
+    var salesTaxText = UILabel()
+    var salesTaxValue = UILabel()
     var serviceField = UITextField()
     var serviceText = UILabel()
     var serviceTypeBtn = UIButton()
@@ -44,8 +52,9 @@ class BillView: UIViewController {
     var toPayment = UIButton()
     
     var billPreTax = Double()
-    var billTotal = Double()
+    var taxes = Double()
     var serviceAmount = Double()
+    var billTotal = Double()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +68,7 @@ class BillView: UIViewController {
         locationName = UILabel.init(frame: CGRect(x: 0, y: 45, width: view.frame.size.width, height: 40))
         locationName.text = "Boardwalk Fine Dining!"
         locationName.textAlignment = .center
-        locationName.setSizeFont(sizeFont: 25.0)
+        locationName.setSizeFont(sizeFont: 30.0)
         locationName.textColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
         view.addSubview(locationName)
         
@@ -119,7 +128,7 @@ class BillView: UIViewController {
         view.addSubview(itemFiveName)
         
         itemFivePriceDisplay = UILabel.init(frame: CGRect(x: 10, y: 240, width: view.frame.size.width - 30, height: 30))
-        itemFivePriceDisplay.text = "$12.47"
+        itemFivePriceDisplay.text = "$12.49"
         itemFivePriceDisplay.textAlignment = .right
         itemFivePriceDisplay.setSizeFont(sizeFont: 14.0)
         view.addSubview(itemFivePriceDisplay)
@@ -130,11 +139,22 @@ class BillView: UIViewController {
         lineSubTotal.setSizeFont(sizeFont: 14.0)
         view.addSubview(lineSubTotal)
         
-        salesTax = UILabel.init(frame: CGRect(x: 0, y: 290, width: view.frame.size.width - 24, height: 30))
-        salesTax.text = "Sales Tax:     7.5%"
-        salesTax.textAlignment = .right
-        salesTax.setSizeFont(sizeFont: 14.0)
-        view.addSubview(salesTax)
+        billPreTax = 167.95
+        taxes = billPreTax * 0.075
+        taxes = taxes.roundTo(places: 2)
+        billTotal = billPreTax + taxes
+        
+        salesTaxText = UILabel.init(frame: CGRect(x: view.frame.size.width - 220, y: 290, width: 140, height: 30))
+        salesTaxText.text = "Sales Tax (7.5%): "
+        salesTaxText.textAlignment = .right
+        salesTaxText.setSizeFont(sizeFont: 14.0)
+        view.addSubview(salesTaxText)
+        
+        salesTaxValue = UILabel.init(frame: CGRect(x: 0, y: 290, width: view.frame.size.width - 18, height: 30))
+        salesTaxValue.text = String(format: "$%.2f", taxes)
+        salesTaxValue.textAlignment = .right
+        salesTaxValue.setSizeFont(sizeFont: 14.0)
+        view.addSubview(salesTaxValue)
         
         serviceTypeBtn = UIButton.init(frame: CGRect(x: view.frame.size.width - 179, y: 318, width: 30, height: 30))
         serviceTypeBtn.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
@@ -165,10 +185,8 @@ class BillView: UIViewController {
         totalText.setSizeFont(sizeFont: 14.0)
         view.addSubview(totalText)
         
-        billTotal = 499.99
-        
         totalDisplay = UILabel.init(frame: CGRect(x: 0, y: 350, width: view.frame.size.width - 18, height: 30))
-        totalDisplay.text = "$\(billTotal)"
+        totalDisplay.text = String(format: "$%.2f", billTotal)
         totalDisplay.textAlignment = .right
         totalDisplay.setSizeFont(sizeFont: 14.0)
         view.addSubview(totalDisplay)
@@ -181,7 +199,6 @@ class BillView: UIViewController {
         toPayment.setTitle("Proceed To Payment", for: .normal)
         toPayment.setTitleColor(.black, for: .normal)
         view.addSubview(toPayment)
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -189,6 +206,4 @@ class BillView: UIViewController {
         
     }
     
-
-
 }
