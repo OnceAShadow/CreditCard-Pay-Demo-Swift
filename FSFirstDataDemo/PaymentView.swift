@@ -15,6 +15,11 @@ import UIKit
 
 class PaymentView: UIViewController, UITextFieldDelegate {
 
+    let KApiKey = "test_apikey_bA8hIqpzuAVW6itHqXsXwSl6JtFWPCA0"
+    let KApiSecret = "test_apitsecret_YmI4YzA1NmRkZmQzMzA1ZmIZjYzwMWIzZThkMWU2NGRjZmI4OWE5NGRiMzM4NA=="
+    let KToken = "test_merchant_token_fdoa-a480ce8951daa73262734cf102641994c1e55e7cdf4c02b6"
+    let KURL = "https://api-cert.payeezy.com/v1/transactions"
+    
     var ccText = UILabel()
     var ccType = UILabel()
     
@@ -142,11 +147,84 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         
     }
     
-    func sendPayment(button: UIButton) {
-        
-    }
-    
     func backToBill(button: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    func sendPayment(button: UIButton) {
+        
+        let ccName = cardHolderName.text
+        let ccNumber = cardNumbers.text
+        let cvv = cvvNumbers.text
+        let expDate = "0450"
+        var amount = String(format: "%.2f", billAmount)
+        amount = amount.replacingOccurrences(of: ".", with: "")
+        
+        var testClient = PayeezySDK.init(apiKey: KApiKey, apiSecret: KApiSecret, merchantToken: KToken, url: KURL)
+        
+        //testClient?.submitAuthorizePurchaseTransaction(withCreditCardDetails: , cardExpMMYY: expDate, cardNumber: ccNumber, cardHolderName: ccName, cardType: <#T##String!#>, currencyCode: <#T##String!#>, totalAmount: <#T##String!#>, merchantRef: <#T##String!#>, transactionType: <#T##String!#>, token_type: <#T##String!#>, method: <#T##String!#>, completion: <#T##(([AnyHashable : Any]?, Error?) -> Void)!##(([AnyHashable : Any]?, Error?) -> Void)!##([AnyHashable : Any]?, Error?) -> Void#>)
+        
+        
+        
+        
+        // This is from the Objective C Example.
+        
+        
+//        NSString* cardHolderName = _card_holder_name.text;
+//        NSDecimalNumber* valueEntered = [NSDecimalNumber decimalNumberWithString:_amountEntered.text];
+//        NSString* cardNumber  = _card_number.text;
+//        NSString* cardSecurityCode = _card_security_code.text;
+//        
+//        if (![valueEntered isEqualToNumber:[NSDecimalNumber notANumber]]) {
+//            
+//            NSString *amount = [[NSString stringWithFormat:@"%@",valueEntered] stringByReplacingOccurrencesOfString:@"." withString:@""];
+//            
+//            // Test credit card inf
+//            NSDictionary* credit_card = @{
+//                @"type":@"visa",
+//                @"cardholder_name":cardHolderName,
+//                @"card_number":cardNumber,
+//                @"exp_date":@"0450",
+//                @"cvv":cardSecurityCode
+//            };
+//            PayeezySDK* myClient = [[PayeezySDK alloc]initWithApiKey:KApiKey apiSecret:KApiSecret merchantToken:KToken url:KURL];
+//            
+//            //myClient.url = KURL;
+//            
+//            [myClient submitAuthorizeTransactionWithCreditCardDetails:credit_card[@"type"] cardHolderName:credit_card[@"cardholder_name"] cardNumber:credit_card[@"card_number"] cardExpirymMonthAndYear:credit_card[@"exp_date"] cardCVV:credit_card[@"cvv"] currencyCode:@"USD" totalAmount:amount merchantRefForProcessing:@"abc1412096293369"
+//            
+//            completion:^(NSDictionary *dict, NSError *error) {
+//                
+//                NSString *authStatusMessage = nil;
+//                
+//                if (error == nil)
+//                {
+//                    authStatusMessage = [NSString stringWithFormat:@"Transaction Successful\rType:%@\rTransaction ID:%@\rTransaction Tag:%@\rCorrelation Id:%@\rBank Response Code:%@",
+//                    [dict objectForKey:@"transaction_type"],
+//                    [dict objectForKey:@"transaction_id"],
+//                    [dict objectForKey:@"transaction_tag"],
+//                    [dict objectForKey:@"correlation_id"],
+//                    [dict objectForKey:@"bank_resp_code"]];
+//                    [self voidRefundCaptureTransaction:@"abc1412096293369" :[dict objectForKey:@"transaction_tag"] :@"capture" :[dict objectForKey:@"transaction_id"] :amount];
+//                    
+//                }
+//                else
+//                {
+//                    authStatusMessage = [NSString stringWithFormat:@"Error was encountered processing transaction: %@", error.debugDescription];
+//                }
+//                
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"First Data Payment Authorization"
+//                message:authStatusMessage delegate:self
+//                cancelButtonTitle:@"Dismiss"
+//                otherButtonTitles:nil];
+//                [alert show];
+//            }];
+//        }
+        
+       
+        
+        
+        
+    }
+    
 }
