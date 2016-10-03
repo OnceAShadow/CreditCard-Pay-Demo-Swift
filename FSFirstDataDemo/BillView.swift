@@ -218,14 +218,14 @@ class BillView: UIViewController, UITextFieldDelegate {
         if !button.isSelected {
             button.isSelected = true
             button.setTitle("%", for: .normal)
-            serviceField.text = ""
             serviceField.placeholder = "0%"
         } else {
             button.isSelected = false
             button.setTitle("$", for: .normal)
-            serviceField.text = ""
             serviceField.placeholder = "$0.00"
         }
+        serviceField.text = ""
+        calculateService()
     }
     
     func goToPaymentView(button: UIButton) {
@@ -236,12 +236,32 @@ class BillView: UIViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        calculateService()
         return true
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
         super.touchesBegan(touches, with: event)
+        calculateService()
     }
     
+    func calculateService() {
+        if !serviceTypeBtn.isSelected {
+            serviceAmount = Double(serviceField.text!) ?? 0
+        }else{
+            serviceAmount = Double(serviceField.text!) ?? 0
+            serviceAmount = serviceAmount * billPreTax * 0.01
+        }
+        
+        print(serviceAmount)
+        billTotal = billPreTax + taxes + serviceAmount
+        totalDisplay.text = String(format: "$%.2f", billTotal)
+    }
+    
+    // This needs more work to prevent more then 1 "." to be entered by the user
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let invalidCharacters = CharacterSet(charactersIn: "0123456789.").inverted
+        return string.rangeOfCharacter(from: invalidCharacters, options: [], range: string.startIndex ..< string.endIndex) == nil
+    }
 }

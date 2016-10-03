@@ -113,8 +113,8 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         amountText.setSizeFont(sizeFont: 16.0)
         view.addSubview(amountText)
         
-        amountValue = UILabel.init(frame: CGRect(x: view.frame.size.width/2 - 50, y: view.frame.size.height - 250, width: 100, height: 30))
-        amountValue.text = "$\(billAmount)"
+        amountValue = UILabel.init(frame: CGRect(x: view.frame.size.width/2 - 100, y: view.frame.size.height - 250, width: 200, height: 30))
+        amountValue.text = String(format: "$%.2f", billAmount)
         amountValue.textAlignment = .center
         amountValue.setSizeFont(sizeFont: 24.0)
         amountValue.textColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
