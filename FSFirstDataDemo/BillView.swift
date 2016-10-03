@@ -181,7 +181,7 @@ class BillView: UIViewController, UITextFieldDelegate {
         serviceField = UITextField.init(frame: CGRect(x: view.frame.size.width - 74, y: 355, width: 60, height: 25))
         serviceField.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
         serviceField.layer.cornerRadius = 4
-        serviceField.textAlignment = .right
+        serviceField.textAlignment = .center
         serviceField.placeholder = "$0.00"
         serviceField.keyboardType = .numbersAndPunctuation
         serviceField.delegate = self
@@ -231,7 +231,6 @@ class BillView: UIViewController, UITextFieldDelegate {
     func goToPaymentView(button: UIButton) {
         paymentView = PaymentView.init()
         paymentView.billAmount = billTotal
-        paymentView.billView = self
         present(paymentView, animated: true, completion: nil)
     }
     

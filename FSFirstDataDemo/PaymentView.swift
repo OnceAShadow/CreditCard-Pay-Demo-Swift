@@ -37,8 +37,6 @@ class PaymentView: UIViewController, UITextFieldDelegate {
     var payButton = UIButton()
     var backButton = UIButton()
     
-    var billView = BillView()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -139,7 +137,6 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         view.addSubview(requestStatus)
     }
     
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
@@ -150,6 +147,6 @@ class PaymentView: UIViewController, UITextFieldDelegate {
     }
     
     func backToBill(button: UIButton) {
-        present(billView, animated: true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }
