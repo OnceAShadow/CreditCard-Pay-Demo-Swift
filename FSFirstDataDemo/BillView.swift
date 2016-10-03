@@ -187,16 +187,16 @@ class BillView: UIViewController, UITextFieldDelegate {
         serviceField.delegate = self
         view.addSubview(serviceField)
         
-        totalText = UILabel.init(frame: CGRect(x: view.frame.size.width - 140, y: 385, width: 60, height: 30))
+        totalText = UILabel.init(frame: CGRect(x: view.frame.size.width - 155, y: 385, width: 60, height: 30))
         totalText.text = "Total: "
         totalText.textAlignment = .right
-        totalText.setSizeFont(sizeFont: 14.0)
+        totalText.setSizeFont(sizeFont: 18.0)
         view.addSubview(totalText)
         
-        totalDisplay = UILabel.init(frame: CGRect(x: 0, y: 385, width: view.frame.size.width - 18, height: 30))
+        totalDisplay = UILabel.init(frame: CGRect(x: 0, y: 385, width: view.frame.size.width - 16, height: 30))
         totalDisplay.text = String(format: "$%.2f", billTotal)
         totalDisplay.textAlignment = .right
-        totalDisplay.setSizeFont(sizeFont: 14.0)
+        totalDisplay.setSizeFont(sizeFont: 18.0)
         view.addSubview(totalDisplay)
         
         toPayment = UIButton.init(frame: CGRect(x: view.frame.size.width/2 - 90, y: view.frame.size.height - 200, width: 180, height: 50))
@@ -231,6 +231,7 @@ class BillView: UIViewController, UITextFieldDelegate {
     func goToPaymentView(button: UIButton) {
         paymentView = PaymentView.init()
         paymentView.billAmount = billTotal
+        paymentView.billView = self
         present(paymentView, animated: true, completion: nil)
     }
     
