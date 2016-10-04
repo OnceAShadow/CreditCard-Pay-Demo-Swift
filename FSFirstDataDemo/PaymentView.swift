@@ -35,9 +35,13 @@ class PaymentView: UIViewController, UITextFieldDelegate {
     var payButton = UIButton()
     var backButton = UIButton()
     
+    var attempts = Int()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        attempts = 0
+        
         view.backgroundColor = UIColor(colorLiteralRed: 0.3, green: 0.5, blue: 0.7, alpha: 1.0)
         
         backButton = UIButton.init(frame: CGRect(x: -8, y: 35, width: 45, height: 60))
@@ -128,10 +132,11 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         payButton.addTarget(self, action: #selector(sendPayment), for: .touchUpInside)
         view.addSubview(payButton)
         
-        requestStatus = UILabel.init(frame: CGRect(x: view.frame.size.width/2 - 100, y: view.frame.size.height - 125, width: 200, height: 30))
+        requestStatus = UILabel.init(frame: CGRect(x: view.frame.size.width/2 - 125, y: view.frame.size.height - 125, width: 250, height: 90))
         requestStatus.text = ""
+        requestStatus.numberOfLines = 4
         requestStatus.textAlignment = .center
-        requestStatus.setSizeFont(sizeFont: 18.0)
+        requestStatus.setSizeFont(sizeFont: 16.0)
         view.addSubview(requestStatus)
     }
     
@@ -157,95 +162,39 @@ class PaymentView: UIViewController, UITextFieldDelegate {
                                             "exp": "1020"]
                                           
         let transaction_info: [String: String] = ["currency": "USD",
-                                                  "amount": amount,
+                                                  "amount": "amount",
                                                   "merchantRef": "3176752955",
                                                   "type": "purchase"]
         
         let testClient = PayeezySDK.init(apiKey: KApiKey, apiSecret: KApiSecret, merchantToken: KToken, url: KURL)
         
-        
         testClient?.submitAuthorizePurchaseTransaction(withCreditCardDetails: credit_card["type"], cardExpMMYY: credit_card["exp"], cardNumber: credit_card["number"], cardHolderName: credit_card["name"], cardType: credit_card["type"], currencyCode: transaction_info["currency"], totalAmount: transaction_info["amount"], merchantRef: transaction_info["merchantRef"], transactionType: "purchase", token_type: "FDToken", method: "token", completion: { (data, error) in
             
             if error == nil {
-                print("working")
+
+                self.requestStatus.text = "Transaction Successful! You were emailed a copy of the Receipt."
+                self.requestStatus.setSizeFont(sizeFont: 16.0)
+                self.payButton.isEnabled = false
+                self.payButton.setTitle("Successful!", for: .disabled)
+                self.payButton.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.8, blue: 0.50, alpha: 1.0)
+                
             }else{
-                print("")
-                print("not working")
-                print("")
-                print(error)
-                print("")
+                self.attempts += 1
+                if self.attempts < 3 {
+                    self.requestStatus.text = String(format: "Transction Error: %@", error.debugDescription)
+                    self.requestStatus.textColor = .red
+                    self.requestStatus.setSizeFont(sizeFont: 14.0)
+                }else{
+                    self.requestStatus.text = String(format: "Transction Error! Please contact your Bank.")
+                    self.requestStatus.textColor = .red
+                    self.requestStatus.setSizeFont(sizeFont: 16.0)
+                    self.payButton.isEnabled = false
+                    self.payButton.setTitle("Blocked!", for: .disabled)
+                    self.payButton.backgroundColor = UIColor(colorLiteralRed: 0.5, green: 0.4, blue: 0.50, alpha: 1.0)
+                }
+
             }
 
         })
-        
-        
-        
-        
-        
-        
-        
-        
-//        
-//        testClient?.submitPurchaseTransaction(withAVSCreditCardDetails: cardType, cardHolderName: ccName, cardNumber: ccNumber, cardExpirymMonthAndYear: expDate, cardCVV: cvv, currencyCode: "USD", totalAmount: amount, merchantRefForProcessing: "3176752955", completion: { ( data, error) in
-//            
-//            if error != nil {
-//                print("working")
-//            }else{
-//                print("not working")
-//            }
-//        })
-
-//        NSString* cardHolderName = _card_holder_name.text;
-//        NSDecimalNumber* valueEntered = [NSDecimalNumber decimalNumberWithString:_amountEntered.text];
-//        NSString* cardNumber  = _card_number.text;
-//        NSString* cardSecurityCode = _card_security_code.text;
-//        
-//        if (![valueEntered isEqualToNumber:[NSDecimalNumber notANumber]]) {
-//            
-//            NSString *amount = [[NSString stringWithFormat:@"%@",valueEntered] stringByReplacingOccurrencesOfString:@"." withString:@""];
-//            
-//            // Test credit card inf
-//            NSDictionary* credit_card = @{
-//                @"type":@"visa",
-//                @"cardholder_name":cardHolderName,
-//                @"card_number":cardNumber,
-//                @"exp_date":@"0450",
-//                @"cvv":cardSecurityCode
-//            };
-//            PayeezySDK* myClient = [[PayeezySDK alloc]initWithApiKey:KApiKey apiSecret:KApiSecret merchantToken:KToken url:KURL];
-//            
-//            //myClient.url = KURL;
-//            
-//            [myClient submitAuthorizeTransactionWithCreditCardDetails:credit_card[@"type"] cardHolderName:credit_card[@"cardholder_name"] cardNumber:credit_card[@"card_number"] cardExpirymMonthAndYear:credit_card[@"exp_date"] cardCVV:credit_card[@"cvv"] currencyCode:@"USD" totalAmount:amount merchantRefForProcessing:@"abc1412096293369"
-//            
-//            completion:^(NSDictionary *dict, NSError *error) {
-//                
-//                NSString *authStatusMessage = nil;
-//                
-//                if (error == nil)
-//                {
-//                    authStatusMessage = [NSString stringWithFormat:@"Transaction Successful\rType:%@\rTransaction ID:%@\rTransaction Tag:%@\rCorrelation Id:%@\rBank Response Code:%@",
-//                    [dict objectForKey:@"transaction_type"],
-//                    [dict objectForKey:@"transaction_id"],
-//                    [dict objectForKey:@"transaction_tag"],
-//                    [dict objectForKey:@"correlation_id"],
-//                    [dict objectForKey:@"bank_resp_code"]];
-//                    [self voidRefundCaptureTransaction:@"abc1412096293369" :[dict objectForKey:@"transaction_tag"] :@"capture" :[dict objectForKey:@"transaction_id"] :amount];
-//                    
-//                }
-//                else
-//                {
-//                    authStatusMessage = [NSString stringWithFormat:@"Error was encountered processing transaction: %@", error.debugDescription];
-//                }
-//                
-//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"First Data Payment Authorization"
-//                message:authStatusMessage delegate:self
-//                cancelButtonTitle:@"Dismiss"
-//                otherButtonTitles:nil];
-//                [alert show];
-//            }];
-//        }
- 
     }
-    
 }
