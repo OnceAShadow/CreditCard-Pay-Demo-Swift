@@ -216,16 +216,67 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         super.touchesBegan(touches, with: event)
     }
     
-    func cardNameCheck(textField: UITextField) {
+    func cardNameCheck(textField: UITextField) -> Bool {
         
+        let newText = removeNonNameCharacters(text: textField.text!)
+        
+        if newText.characters.count != textField.text?.characters.count {
+            textField.text = newText.capitalized
+            
+            return false
+        }
+        
+        if (textField.text?.characters.count)! > 35 {
+
+            let indexTo = textField.text?.index((textField.text?.startIndex)!, offsetBy: 35)
+            textField.text = textField.text?.substring(to:indexTo!)
+            return false
+        }
+        
+        return true
     }
     
-    func cardNumbersCheck(textField: UITextField) {
+    func cardNumbersCheck(textField: UITextField) -> Bool {
+        let newText = removeNonNumbersCharacters(text: textField.text!)
         
+        if newText.characters.count != textField.text?.characters.count {
+            textField.text = newText.capitalized
+            
+            return false
+        }
+        
+        return true
     }
     
-    func cvvNumbersCheck(textField: UITextField) {
+    func cvvNumbersCheck(textField: UITextField) -> Bool {
+        let newText = removeNonNumbersCharacters(text: textField.text!)
         
+        if newText.characters.count != textField.text?.characters.count {
+            textField.text = newText.capitalized
+            
+            return false
+        }
+        
+        if (textField.text?.characters.count)! > 3 {
+            if textField.text?.characters.count == 4 && ccType.text == "Amex" {
+                return true
+            }
+            let indexTo = textField.text?.index((textField.text?.startIndex)!, offsetBy: 3)
+            textField.text = textField.text?.substring(to:indexTo!)
+            return false
+        }
+        
+        return true
+    }
+
+    func removeNonNumbersCharacters(text: String) -> String {
+        let goodChars : Set<Character> = Set("1234567890".characters)
+        return String(text.characters.filter { goodChars.contains($0)})
+    }
+    
+    func removeNonNameCharacters(text: String) -> String {
+        let goodChars : Set<Character> = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ".characters)
+        return String(text.characters.filter { goodChars.contains($0)})
     }
 
 }

@@ -275,18 +275,15 @@ class BillView: UIViewController, UITextFieldDelegate {
             textField.text = newText
             return false
         }
-        
         // prevents the field from having 2 "."
         if (textField.text?.components(separatedBy: ".").count)! > 2 {
             textField.text?.remove(at: (textField.text?.index(before: (textField.text?.endIndex)!))!)
             return false
         }
-        
         return true
     }
     
     func removeNonMonetaryValueCharacters(text: String) -> String {
-        //let goodChars : Set<Character> = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890+-*=(),.:!_".characters)
         let goodChars : Set<Character> = Set("0123456789.".characters)
         return String(text.characters.filter { goodChars.contains($0)})
     }
