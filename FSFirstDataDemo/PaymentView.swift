@@ -79,6 +79,8 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         cardHolderName.textAlignment = .center
         cardHolderName.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
         cardHolderName.layer.cornerRadius = 8
+        cardHolderName.addTarget(self, action: #selector(cardNameCheck), for: .editingChanged)
+        cardHolderName.delegate = self
         view.addSubview(cardHolderName)
         
         cardNumbersText = UILabel.init(frame: CGRect(x: view.frame.size.width/2 - 100, y: 200, width: 200, height: 30))
@@ -93,6 +95,9 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         cardNumbers.textAlignment = .center
         cardNumbers.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
         cardNumbers.layer.cornerRadius = 8
+        cardNumbers.keyboardType = .numberPad
+        cardNumbers.addTarget(self, action: #selector(cardNumbersCheck), for: .editingChanged)
+        cardNumbers.delegate = self
         view.addSubview(cardNumbers)
         
         cvvText = UILabel.init(frame: CGRect(x: view.frame.size.width/2 - 50, y: 280, width: 100, height: 30))
@@ -107,6 +112,9 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         cvvNumbers.textAlignment = .center
         cvvNumbers.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
         cvvNumbers.layer.cornerRadius = 8
+        cvvNumbers.keyboardType = .numberPad
+        cvvNumbers.addTarget(self, action: #selector(cvvNumbersCheck), for: .editingChanged)
+        cvvNumbers.delegate = self
         view.addSubview(cvvNumbers)
         
         amountText = UILabel.init(frame: CGRect(x: view.frame.size.width/2 - 100, y: view.frame.size.height - 275, width: 200, height: 30))
@@ -150,10 +158,12 @@ class PaymentView: UIViewController, UITextFieldDelegate {
     }
     
     func sendPayment(button: UIButton) {
+        requestStatus.text = "One Moment Please..."
+        requestStatus.setSizeFont(sizeFont: 16.0)
+        requestStatus.textColor = .black
         
         var amount = String(format: "%.2f", billAmount)
         amount = amount.replacingOccurrences(of: ".", with: "")
-        amount = "1499"
         
         let credit_card: [String: String] = ["type": "visa",
                                             "name": "John Smith",
@@ -162,7 +172,7 @@ class PaymentView: UIViewController, UITextFieldDelegate {
                                             "exp": "1020"]
                                           
         let transaction_info: [String: String] = ["currency": "USD",
-                                                  "amount": "amount",
+                                                  "amount": amount,
                                                   "merchantRef": "3176752955",
                                                   "type": "purchase"]
         
@@ -171,9 +181,9 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         testClient?.submitAuthorizePurchaseTransaction(withCreditCardDetails: credit_card["type"], cardExpMMYY: credit_card["exp"], cardNumber: credit_card["number"], cardHolderName: credit_card["name"], cardType: credit_card["type"], currencyCode: transaction_info["currency"], totalAmount: transaction_info["amount"], merchantRef: transaction_info["merchantRef"], transactionType: "purchase", token_type: "FDToken", method: "token", completion: { (data, error) in
             
             if error == nil {
-
                 self.requestStatus.text = "Transaction Successful! You were emailed a copy of the Receipt."
                 self.requestStatus.setSizeFont(sizeFont: 16.0)
+                self.requestStatus.textColor = .black
                 self.payButton.isEnabled = false
                 self.payButton.setTitle("Successful!", for: .disabled)
                 self.payButton.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.8, blue: 0.50, alpha: 1.0)
@@ -192,9 +202,30 @@ class PaymentView: UIViewController, UITextFieldDelegate {
                     self.payButton.setTitle("Blocked!", for: .disabled)
                     self.payButton.backgroundColor = UIColor(colorLiteralRed: 0.5, green: 0.4, blue: 0.50, alpha: 1.0)
                 }
-
             }
-
         })
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+        super.touchesBegan(touches, with: event)
+    }
+    
+    func cardNameCheck(textField: UITextField) {
+        
+    }
+    
+    func cardNumbersCheck(textField: UITextField) {
+        
+    }
+    
+    func cvvNumbersCheck(textField: UITextField) {
+        
+    }
+
 }

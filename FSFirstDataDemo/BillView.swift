@@ -185,6 +185,8 @@ class BillView: UIViewController, UITextFieldDelegate {
         serviceField.placeholder = "$0.00"
         serviceField.keyboardType = .numbersAndPunctuation
         serviceField.delegate = self
+        serviceField.addTarget(self, action: #selector(monetaryValue), for: .editingChanged)
+        serviceField.addTarget(self, action: #selector(updateTotal), for: .editingDidEnd)
         view.addSubview(serviceField)
         
         totalText = UILabel.init(frame: CGRect(x: view.frame.size.width - 155, y: 385, width: 60, height: 30))
@@ -236,14 +238,12 @@ class BillView: UIViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        calculateService()
         return true
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
         super.touchesBegan(touches, with: event)
-        calculateService()
     }
     
     func calculateService() {
@@ -253,15 +253,21 @@ class BillView: UIViewController, UITextFieldDelegate {
             serviceAmount = Double(serviceField.text!) ?? 0
             serviceAmount = serviceAmount * billPreTax * 0.01
         }
-        
-        print(serviceAmount)
         billTotal = billPreTax + taxes + serviceAmount
         totalDisplay.text = String(format: "$%.2f", billTotal)
     }
     
-    // This needs more work to prevent more then 1 "." to be entered by the user
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let invalidCharacters = CharacterSet(charactersIn: "0123456789.").inverted
-        return string.rangeOfCharacter(from: invalidCharacters, options: [], range: string.startIndex ..< string.endIndex) == nil
+    func monetaryValue(textField: UITextField) {
+        // handle this
     }
+    
+    func updateTotal(textField: UITextField) {
+        calculateService()
+    }
+    
+    // This needs more work to prevent more then 1 "." to be entered by the user
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        let invalidCharacters = CharacterSet(charactersIn: "0123456789.").inverted
+//        return string.rangeOfCharacter(from: invalidCharacters, options: [], range: string.startIndex ..< string.endIndex) == nil
+//    }
 }
