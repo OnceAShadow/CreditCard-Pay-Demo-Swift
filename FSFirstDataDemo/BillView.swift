@@ -182,6 +182,7 @@ class BillView: UIViewController, UITextFieldDelegate {
         serviceField.backgroundColor = UIColor(colorLiteralRed: 0.9, green: 0.5, blue: 0.20, alpha: 1.0)
         serviceField.layer.cornerRadius = 4
         serviceField.textAlignment = .center
+        serviceField.text = ""
         serviceField.placeholder = "$0.00"
         serviceField.keyboardType = .numbersAndPunctuation
         serviceField.delegate = self
@@ -216,6 +217,7 @@ class BillView: UIViewController, UITextFieldDelegate {
         super.didReceiveMemoryWarning()
     }
     
+    // change the tip from precent to money or back
     func changeServiceType(button: UIButton) {
         if !button.isSelected {
             button.isSelected = true
@@ -230,12 +232,14 @@ class BillView: UIViewController, UITextFieldDelegate {
         calculateService()
     }
     
+    //changes the view to the payment view
     func goToPaymentView(button: UIButton) {
         paymentView = PaymentView.init()
         paymentView.billAmount = billTotal
         present(paymentView, animated: true, completion: nil)
     }
     
+    //hides the keyboard when the user leaves the textfield
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -244,6 +248,11 @@ class BillView: UIViewController, UITextFieldDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
         super.touchesBegan(touches, with: event)
+    }
+    
+    // Update the total when user leaves the textfield
+    func updateTotal(textField: UITextField) {
+        calculateService()
     }
     
     func calculateService() {
@@ -257,17 +266,29 @@ class BillView: UIViewController, UITextFieldDelegate {
         totalDisplay.text = String(format: "$%.2f", billTotal)
     }
     
-    func monetaryValue(textField: UITextField) {
-        // handle this
+    func monetaryValue(textField: UITextField) -> Bool {
+        
+        var newText = removeNonMonetaryValueCharacters(text: textField.text!)
+        
+        //prevents the field from having anything else then numbers and .
+        if newText.characters.count != textField.text?.characters.count {
+            textField.text = newText
+            return false
+        }
+        
+        // prevents the field from having 2 "."
+        if (textField.text?.components(separatedBy: ".").count)! > 2 {
+            textField.text?.remove(at: (textField.text?.index(before: (textField.text?.endIndex)!))!)
+            return false
+        }
+        
+        return true
     }
     
-    func updateTotal(textField: UITextField) {
-        calculateService()
+    func removeNonMonetaryValueCharacters(text: String) -> String {
+        //let goodChars : Set<Character> = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890+-*=(),.:!_".characters)
+        let goodChars : Set<Character> = Set("0123456789.".characters)
+        return String(text.characters.filter { goodChars.contains($0)})
     }
-    
-    // This needs more work to prevent more then 1 "." to be entered by the user
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        let invalidCharacters = CharacterSet(charactersIn: "0123456789.").inverted
-//        return string.rangeOfCharacter(from: invalidCharacters, options: [], range: string.startIndex ..< string.endIndex) == nil
-//    }
+
 }
