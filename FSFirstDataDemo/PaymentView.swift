@@ -6,18 +6,11 @@
 
 import UIKit
 
-//enum CardType {
-//    case Unknown
-//    case Visa
-//    case MC
-//    case Amex
-//}
-
 class PaymentView: UIViewController, UITextFieldDelegate {
 
-    let KApiKey = "test_apikey_bA8hIqpzuAVW6itHqXsXwSl6JtFWPCA0"
-    let KApiSecret = "test_apitsecret_YmI4YzA1NmRkZmQzMzA1ZmIZjYzwMWIzZThkMWU2NGRjZmI4OWE5NGRiMzM4NA=="
-    let KToken = "test_merchant_token_fdoa-a480ce8951daa73262734cf102641994c1e55e7cdf4c02b6"
+    let KApiKey = "YJoqkxsRGYxo6cBczGJRq4VGVF0hJrQd"
+    let KApiSecret = "9ba602ee5a9dbc971d2aa9ef51686cb3f5214d27033becfeed4a1966f4bea0bd"
+    let KToken = "fdoa-7fae54dc5420e9198cf708675ea45eda7fae54dc5420e919"
     let KURL = "https://api-cert.payeezy.com/v1/transactions"
     
     var ccText = UILabel()
@@ -153,23 +146,55 @@ class PaymentView: UIViewController, UITextFieldDelegate {
     
     func sendPayment(button: UIButton) {
         
-        let ccName = cardHolderName.text
-        let ccNumber = cardNumbers.text
-        let cvv = cvvNumbers.text
-        let expDate = "0450"
         var amount = String(format: "%.2f", billAmount)
         amount = amount.replacingOccurrences(of: ".", with: "")
+        amount = "1499"
         
-        var testClient = PayeezySDK.init(apiKey: KApiKey, apiSecret: KApiSecret, merchantToken: KToken, url: KURL)
+        let credit_card: [String: String] = ["type": "visa",
+                                            "name": "John Smith",
+                                            "number": "4788250000028291",
+                                            "cvv": "123",
+                                            "exp": "1020"]
+                                          
+        let transaction_info: [String: String] = ["currency": "USD",
+                                                  "amount": amount,
+                                                  "merchantRef": "3176752955",
+                                                  "type": "purchase"]
         
-        //testClient?.submitAuthorizePurchaseTransaction(withCreditCardDetails: , cardExpMMYY: expDate, cardNumber: ccNumber, cardHolderName: ccName, cardType: <#T##String!#>, currencyCode: <#T##String!#>, totalAmount: <#T##String!#>, merchantRef: <#T##String!#>, transactionType: <#T##String!#>, token_type: <#T##String!#>, method: <#T##String!#>, completion: <#T##(([AnyHashable : Any]?, Error?) -> Void)!##(([AnyHashable : Any]?, Error?) -> Void)!##([AnyHashable : Any]?, Error?) -> Void#>)
+        let testClient = PayeezySDK.init(apiKey: KApiKey, apiSecret: KApiSecret, merchantToken: KToken, url: KURL)
+        
+        
+        testClient?.submitAuthorizePurchaseTransaction(withCreditCardDetails: credit_card["type"], cardExpMMYY: credit_card["exp"], cardNumber: credit_card["number"], cardHolderName: credit_card["name"], cardType: credit_card["type"], currencyCode: transaction_info["currency"], totalAmount: transaction_info["amount"], merchantRef: transaction_info["merchantRef"], transactionType: "purchase", token_type: "FDToken", method: "token", completion: { (data, error) in
+            
+            if error == nil {
+                print("working")
+            }else{
+                print("")
+                print("not working")
+                print("")
+                print(error)
+                print("")
+            }
+
+        })
         
         
         
         
-        // This is from the Objective C Example.
         
         
+        
+        
+//        
+//        testClient?.submitPurchaseTransaction(withAVSCreditCardDetails: cardType, cardHolderName: ccName, cardNumber: ccNumber, cardExpirymMonthAndYear: expDate, cardCVV: cvv, currencyCode: "USD", totalAmount: amount, merchantRefForProcessing: "3176752955", completion: { ( data, error) in
+//            
+//            if error != nil {
+//                print("working")
+//            }else{
+//                print("not working")
+//            }
+//        })
+
 //        NSString* cardHolderName = _card_holder_name.text;
 //        NSDecimalNumber* valueEntered = [NSDecimalNumber decimalNumberWithString:_amountEntered.text];
 //        NSString* cardNumber  = _card_number.text;
@@ -220,11 +245,7 @@ class PaymentView: UIViewController, UITextFieldDelegate {
 //                [alert show];
 //            }];
 //        }
-        
-       
-        
-        
-        
+ 
     }
     
 }
