@@ -165,10 +165,10 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         var amount = String(format: "%.2f", billAmount)
         amount = amount.replacingOccurrences(of: ".", with: "")
         
-        let credit_card: [String: String] = ["type": "visa",
-                                            "name": "John Smith",
-                                            "number": "4788250000028291",
-                                            "cvv": "123",
+        let credit_card: [String: String] = ["type": ccType.text!,
+                                            "name": cardHolderName.text!,
+                                            "number": cardNumbers.text!,
+                                            "cvv": cvvNumbers.text!,
                                             "exp": "1020"]
                                           
         let transaction_info: [String: String] = ["currency": "USD",
@@ -201,6 +201,7 @@ class PaymentView: UIViewController, UITextFieldDelegate {
                     self.payButton.isEnabled = false
                     self.payButton.setTitle("Blocked!", for: .disabled)
                     self.payButton.backgroundColor = UIColor(colorLiteralRed: 0.5, green: 0.4, blue: 0.50, alpha: 1.0)
+                    print(error)
                 }
             }
         })
@@ -219,30 +220,49 @@ class PaymentView: UIViewController, UITextFieldDelegate {
     func cardNameCheck(textField: UITextField) -> Bool {
         
         let newText = removeNonNameCharacters(text: textField.text!)
-        
+        // Only Letters are accepted.
         if newText.characters.count != textField.text?.characters.count {
             textField.text = newText.capitalized
-            
             return false
         }
         
+        // Max credit card name set to 35.
         if (textField.text?.characters.count)! > 35 {
-
             let indexTo = textField.text?.index((textField.text?.startIndex)!, offsetBy: 35)
             textField.text = textField.text?.substring(to:indexTo!)
             return false
         }
-        
         return true
     }
     
     func cardNumbersCheck(textField: UITextField) -> Bool {
         let newText = removeNonNumbersCharacters(text: textField.text!)
-        
+        // Only numbers are accepted
         if newText.characters.count != textField.text?.characters.count {
             textField.text = newText.capitalized
-            
             return false
+        }
+        
+        if (textField.text?.characters.count)! > 16 {
+            let indexTo = textField.text?.index((textField.text?.startIndex)!, offsetBy: 16)
+            textField.text = textField.text?.substring(to:indexTo!)
+            return false
+        }
+        
+        if (textField.text?.characters.count)! == 16 {
+            if textField.text?[(textField.text?.startIndex)!] == "4" {
+                ccType.text = "Visa"
+            } else if textField.text?[(textField.text?.startIndex)!] == "5" {
+                ccType.text = "mastercard"
+            } else {
+                ccType.text = "Unknown"
+            }
+        }
+        
+        if (textField.text?.characters.count)! == 15 {
+            if textField.text?[(textField.text?.startIndex)!] == "3" {
+                ccType.text = "American Express"
+            }
         }
         
         return true
@@ -253,10 +273,10 @@ class PaymentView: UIViewController, UITextFieldDelegate {
         
         if newText.characters.count != textField.text?.characters.count {
             textField.text = newText.capitalized
-            
             return false
         }
         
+        // Max length of the CVV is 3 or 4 for amex
         if (textField.text?.characters.count)! > 3 {
             if textField.text?.characters.count == 4 && ccType.text == "Amex" {
                 return true
@@ -265,7 +285,6 @@ class PaymentView: UIViewController, UITextFieldDelegate {
             textField.text = textField.text?.substring(to:indexTo!)
             return false
         }
-        
         return true
     }
 
